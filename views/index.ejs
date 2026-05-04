@@ -1,0 +1,81 @@
+<%- include('partials/header.ejs') %>
+
+<div class="container">
+
+    <% if (message != '') { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> <%= message %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <h4 class="card-title mb-4">All Products</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (products.length > 0) { %>
+                            <% products.forEach(product => { %>
+                                <tr>
+                                    <td><img src="/uploads/<%= product.image %>" width="70" class="img-thumbnail" alt="product"></td>
+                                    <td><%= product.name %></td>
+                                    <td><%= product.category %></td>
+                                    <td>฿<%= product.price %></td>
+                                    <td>
+                                        
+                                        <% if (product.stock == 0) { %>
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                        <% } else { %>
+                                            <%= product.stock %>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <a href="/product/edit/<%= product.id %>" class="btn btn-warning btn-sm">Edit</a>
+                                        
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<%= product.id %>">
+                                            Delete
+                                        </button>
+
+                                        
+                                        <div class="modal fade" id="deleteModal<%= product.id %>" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Confirm Deletion</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body text-start">
+                                                        คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? (<%= product.name %>)
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <a href="/product/delete/<%= product.id %>" class="btn btn-danger">Yes, Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6">No products found. Add some!</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer.ejs') %>
